@@ -1,11 +1,15 @@
 import Link from "next/link";
-import { getCategories } from "@/lib/api";
+import { getCategories, getNews } from "@/lib/api";
 import { getCurrentBanglaDate } from "@/lib/format";
 import NavLinks from "./NavLinks";
 import HeaderAuth from "./HeaderAuth";
+import TickerBar from "./TickerBar";
 
 export default async function Header() {
-  const categories = await getCategories();
+  const [categories, latestNews] = await Promise.all([
+    getCategories(),
+    getNews({ limit: 15 }),
+  ]);
   const banglaDate = getCurrentBanglaDate();
 
   return (
@@ -44,6 +48,9 @@ export default async function Header() {
           <NavLinks categories={categories} />
         </div>
       </div>
+
+      {/* Latest News Ticker */}
+      <TickerBar articles={latestNews} />
     </header>
   );
 }

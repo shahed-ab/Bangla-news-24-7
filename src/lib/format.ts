@@ -43,3 +43,31 @@ export function formatBanglaDateTime(dateInput?: string | Date | null): string {
 export function getCurrentBanglaDate(): string {
   return formatBanglaDate(new Date());
 }
+
+export function formatByline(byline: unknown): string {
+  if (!byline) return "";
+  if (typeof byline === "string") return byline;
+  if (Array.isArray(byline)) {
+    return byline
+      .map((item) => {
+        if (!item) return "";
+        if (typeof item === "string") return item;
+        if (typeof item === "object" && "name" in item) {
+          const b = item as { name?: string; role?: string | null };
+          if (b.role) {
+            return `${b.name} (${b.role})`;
+          }
+          return b.name || "";
+        }
+        return "";
+      })
+      .filter(Boolean)
+      .join(", ");
+  }
+  if (typeof byline === "object" && "name" in (byline as Record<string, unknown>)) {
+    const b = byline as { name?: string; role?: string | null };
+    if (b.role) return `${b.name} (${b.role})`;
+    return b.name || "";
+  }
+  return "";
+}

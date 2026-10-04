@@ -67,18 +67,19 @@ export interface BodyBlockQuote {
   citation?: string;
 }
 
-export interface BodyBlockOther {
-  type: string;
-  [key: string]: unknown;
-}
-
 export type BodyBlock =
   | BodyBlockImage
   | BodyBlockText
   | BodyBlockSubheading
   | BodyBlockList
-  | BodyBlockQuote
-  | BodyBlockOther;
+  | BodyBlockQuote;
+
+export interface ArticleBylineItem {
+  name: string;
+  role?: string | null;
+}
+
+export type ArticleByline = string | ArticleBylineItem[] | ArticleBylineItem | null;
 
 export interface ArticleTopic {
   id: string;
@@ -92,7 +93,7 @@ export interface ArticleDetail {
   link: string;
   firstPublished: string | null;
   lastPublished: string | null;
-  byline: string | null;
+  byline: ArticleByline;
   topics: ArticleTopic[];
   tags: string[];
   imageUrl: string | null;
